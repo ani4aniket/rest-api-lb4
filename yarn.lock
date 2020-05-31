@@ -245,6 +245,22 @@
   resolved "https://registry.yarnpkg.com/@istanbuljs/schema/-/schema-0.1.2.tgz#26520bf09abe4a5644cd5414e37125a8954241dd"
   integrity sha512-tsAQNx32a8CoFhjhijUIhI4kccIAgmGhy8LZMZgGfmXcpMbPRUqn5LWmgRttILi6yeGmBJd2xsPkFMs0PzgPCw==
 
+"@loopback/authentication@^4.2.5":
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/@loopback/authentication/-/authentication-4.2.5.tgz#89dacb924b4bc6d09c4afaf9d7dbb9f58e36953a"
+  integrity sha512-cbCCOCN/BbhtiCA2M1ZAvhwq3oIx778HqLehS8xW1XeSB+L8sP90ESlBtUa4kyOREf0SBcRbFE8RR7LaPB1yhg==
+  dependencies:
+    "@loopback/context" "^3.8.1"
+    "@loopback/core" "^2.7.0"
+    "@loopback/metadata" "^2.1.5"
+    "@loopback/openapi-v3" "^3.4.1"
+    "@loopback/rest" "^5.0.1"
+    "@loopback/security" "^0.2.10"
+    "@types/express" "^4.17.6"
+    "@types/lodash" "^4.14.152"
+    lodash "^4.17.15"
+    tslib "^2.0.0"
+
 "@loopback/boot@^2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@loopback/boot/-/boot-2.3.1.tgz#da3ef627f23042de187bad41ed4345a6b2449eeb"
@@ -445,6 +461,16 @@
     tslib "^2.0.0"
     type-is "^1.6.18"
     validator "^13.0.0"
+
+"@loopback/security@^0.2.10":
+  version "0.2.10"
+  resolved "https://registry.yarnpkg.com/@loopback/security/-/security-0.2.10.tgz#64598ccbd3b7841cf77abfbd3a3aa7f38c9d0b2d"
+  integrity sha512-8zqpPuhdRfIn/v3Hrcv4JSf1/F3eRHGD5iIRpuxJuOZFJOtVV7bkVqR73EaVngCtRyFvwLaTlMi1G5RCQs58/w==
+  dependencies:
+    "@loopback/context" "^3.8.1"
+    "@loopback/core" "^2.7.0"
+    debug "^4.1.1"
+    tslib "^2.0.0"
 
 "@loopback/service-proxy@^2.3.0":
   version "2.3.0"

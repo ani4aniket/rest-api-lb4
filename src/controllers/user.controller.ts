@@ -6,9 +6,11 @@ import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
 import * as _ from 'lodash';
 import {User} from '../models/user.model';
 // import {inject} from '@loopback/context';
-import {UserRepository} from '../repositories/user.repository';
+import {Credentials, UserRepository} from '../repositories/user.repository';
 import {BcryptHasher} from '../services/hash.password.bcrypt';
+import {MyUserService} from '../services/user-service';
 import {validateCredentials} from '../services/validator';
+import {CredentialsRequestBody} from './specs/user.controller.spec';
 
 export class UserController {
   constructor(
@@ -16,8 +18,10 @@ export class UserController {
     public userRepository: UserRepository,
     @inject('service.hasher')
     public hasher: BcryptHasher,
+    @inject('services.user.service')
+    public userService: MyUserService,
   ) {}
-  @post('/signup', {
+  @post('/users/signup', {
     responses: {
       '200': {
         description: 'User',
@@ -35,5 +39,33 @@ export class UserController {
     const savedUser = await this.userRepository.create(userData);
     delete savedUser.password;
     return savedUser;
+  }
+
+  @post('/users/login', {
+    responses: {
+      '200': {
+        description: 'Token',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                token: {
+                  type: 'string',
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  async login(
+    @requestBody(CredentialsRequestBody) credentials: Credentials,
+  ): Promise<{token: string}> {
+    // make sure user exists and password should be valid
+    const user = await this.userService.verifyCredentials(credentials);
+    console.log(user);
+    return Promise.resolve({token: 'jfhjahue84837jhjhani4l'});
   }
 }
