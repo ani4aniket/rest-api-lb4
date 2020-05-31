@@ -8,6 +8,7 @@ import {User} from '../models/user.model';
 // import {inject} from '@loopback/context';
 import {Credentials, UserRepository} from '../repositories/user.repository';
 import {BcryptHasher} from '../services/hash.password.bcrypt';
+import {JWTService} from '../services/jwt-service';
 import {MyUserService} from '../services/user-service';
 import {validateCredentials} from '../services/validator';
 import {CredentialsRequestBody} from './specs/user.controller.spec';
@@ -20,6 +21,8 @@ export class UserController {
     public hasher: BcryptHasher,
     @inject('services.user.service')
     public userService: MyUserService,
+    @inject('services.jwt.service')
+    public jwtService: JWTService,
   ) {}
   @post('/users/signup', {
     responses: {
@@ -66,6 +69,10 @@ export class UserController {
     // make sure user exists and password should be valid
     const user = await this.userService.verifyCredentials(credentials);
     console.log(user);
-    return Promise.resolve({token: 'jfhjahue84837jhjhani4l'});
+    const userProfile = this.userService.convertToUserProfile(user);
+    console.log(userProfile);
+    //generate a json web token
+    const token = await this.jwtService.generateToken(userProfile);
+    return Promise.resolve({token});
   }
 }

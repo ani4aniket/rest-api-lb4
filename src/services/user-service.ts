@@ -2,10 +2,10 @@ import {UserService} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {HttpErrors} from '@loopback/rest';
+import {securityId, UserProfile} from '@loopback/security';
 import {User} from '../models/user.model';
 import {Credentials, UserRepository} from '../repositories/user.repository';
 import {BcryptHasher} from './hash.password.bcrypt';
-
 export class MyUserService implements UserService<User, Credentials> {
   constructor(
     @repository(UserRepository)
@@ -35,7 +35,20 @@ export class MyUserService implements UserService<User, Credentials> {
     return foundUser;
   }
 
-  convertToUserProfile(user: User): import('@loopback/security').UserProfile {
-    throw new Error('Method not implemented.');
+  convertToUserProfile(user: User): UserProfile {
+    let userName = '';
+    if (user.firstName) {
+      userName = user.firstName;
+    }
+    if (user.lastName) {
+      userName = user.firstName
+        ? `${user.firstName} ${user.lastName}`
+        : user.lastName;
+    }
+    return {
+      id: user.id,
+      name: userName,
+      [securityId]: `${user.id}`,
+    };
   }
 }
