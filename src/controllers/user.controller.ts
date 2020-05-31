@@ -4,6 +4,11 @@ import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
 import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
 import * as _ from 'lodash';
+import {
+  PasswordHasherBindings,
+  TokenServiceBindings,
+  UserServiceBindings,
+} from '../keys';
 import {User} from '../models/user.model';
 // import {inject} from '@loopback/context';
 import {Credentials, UserRepository} from '../repositories/user.repository';
@@ -17,11 +22,11 @@ export class UserController {
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
-    @inject('service.hasher')
+    @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public hasher: BcryptHasher,
-    @inject('services.user.service')
+    @inject(UserServiceBindings.USER_SERVICE)
     public userService: MyUserService,
-    @inject('services.jwt.service')
+    @inject(TokenServiceBindings.TOKEN_SERVICE)
     public jwtService: JWTService,
   ) {}
   @post('/users/signup', {
@@ -68,10 +73,7 @@ export class UserController {
   ): Promise<{token: string}> {
     // make sure user exists and password should be valid
     const user = await this.userService.verifyCredentials(credentials);
-    console.log(user);
     const userProfile = this.userService.convertToUserProfile(user);
-    console.log(userProfile);
-    //generate a json web token
     const token = await this.jwtService.generateToken(userProfile);
     return Promise.resolve({token});
   }
