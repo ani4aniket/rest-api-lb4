@@ -1,8 +1,10 @@
 // Uncomment these imports to begin using these cool features!
 
+import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {repository} from '@loopback/repository';
-import {getJsonSchemaRef, post, requestBody} from '@loopback/rest';
+import {get, getJsonSchemaRef, post, requestBody} from '@loopback/rest';
+import {UserProfile} from '@loopback/security';
 import * as _ from 'lodash';
 import {
   PasswordHasherBindings,
@@ -76,5 +78,13 @@ export class UserController {
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
     return Promise.resolve({token});
+  }
+  @get('/users/me')
+  @authenticate('jwt')
+  async me(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: UserProfile,
+  ): Promise<UserProfile> {
+    return Promise.resolve(currentUser);
   }
 }
